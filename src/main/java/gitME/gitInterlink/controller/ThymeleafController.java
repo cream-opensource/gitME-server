@@ -39,6 +39,6 @@ public class ThymeleafController {
         model.addAttribute("repositories", repositories);
         model.addAttribute("langList", langList);
 
-        return "/gitInterlink";
+        return "/gitInterlink"; // test
     }
 }
