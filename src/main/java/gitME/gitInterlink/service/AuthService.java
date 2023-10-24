@@ -21,7 +21,6 @@ public class AuthService {
     public String getAccessToken(String code) {
         String url = "https://github.com/login/oauth/access_token";
 
-        // Set request body parameters
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("client_id", githubClientId);
         body.add("client_secret", githubClientSecret);
