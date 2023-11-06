@@ -1,6 +1,8 @@
 package gitME.auth.service;
 
 import gitME.auth.dto.kakaoDTO;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -13,7 +15,6 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class authService {
-
     @Value("${kakao.client.id}")
     private String KAKAO_CLIENT_ID;
 
