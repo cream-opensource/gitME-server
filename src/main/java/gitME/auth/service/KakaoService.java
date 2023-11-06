@@ -14,7 +14,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class authService {
+public class KakaoService {
     @Value("${kakao.client.id}")
     private String KAKAO_CLIENT_ID;
 
@@ -62,7 +62,7 @@ public class authService {
             );
 
             JSONParser jsonParser = new JSONParser();
-            JSONObject jsonObj = (JSONObject)jsonParser.parse(response.getBody());
+            JSONObject jsonObj = (JSONObject) jsonParser.parse(response.getBody());
 
             accessToken  = (String) jsonObj.get("access_token");
             refreshToken = (String) jsonObj.get("refresh_token");
@@ -91,7 +91,7 @@ public class authService {
 
         //Response 데이터 파싱
         JSONParser jsonParser = new JSONParser();
-        JSONObject jsonObj = (JSONObject) jsonParser.parse(response.getBody());
+        JSONObject jsonObj    = (JSONObject) jsonParser.parse(response.getBody());
         JSONObject account = (JSONObject) jsonObj.get("kakao_account");
         JSONObject profile = (JSONObject) account.get("profile");
 
@@ -104,5 +104,4 @@ public class authService {
                 .email(email)
                 .nickname(nickname).build();
     }
-
 }

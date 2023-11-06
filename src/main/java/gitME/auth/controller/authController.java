@@ -1,7 +1,7 @@
 package gitME.auth.controller;
 
 import gitME.auth.dto.kakaoDTO;
-import gitME.auth.service.authService;
+import gitME.auth.service.KakaoService;
 import gitME.common.MsgEntity;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("kakao")
 public class authController {
 
-    private final authService AuthService;
+    private final KakaoService kakaoService;
 
     @GetMapping("/callback")
     public ResponseEntity<MsgEntity> callback(HttpServletRequest request) throws Exception {
-        kakaoDTO kakaoInfo = AuthService.getKakaoInfo(request.getParameter("code"));
+        kakaoDTO kakaoInfo = kakaoService.getKakaoInfo(request.getParameter("code"));
 
         return ResponseEntity.ok()
                 .body(new MsgEntity("Success", kakaoInfo));
