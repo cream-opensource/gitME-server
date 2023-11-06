@@ -28,6 +28,7 @@ out/
 
 src/main/resources/application.properties
 
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
