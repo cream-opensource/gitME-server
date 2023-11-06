@@ -1,6 +1,6 @@
 package gitME.auth.service;
 
-import gitME.auth.dto.kakaoDTO;
+import gitME.auth.dto.KakaoDTO;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,7 +34,7 @@ public class KakaoService {
                 + "&response_type=code";
     }
 
-    public kakaoDTO getKakaoInfo(String code) throws Exception {
+    public KakaoDTO getKakaoInfo(String code) throws Exception {
         if (code == null) throw new Exception("Failed get authorization code");
 
         String accessToken = "";
@@ -73,7 +73,7 @@ public class KakaoService {
         return getUserInfoWithToken(accessToken);
     }
 
-    private kakaoDTO getUserInfoWithToken(String accessToken) throws Exception {
+    private KakaoDTO getUserInfoWithToken(String accessToken) throws Exception {
         //HttpHeader 생성
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
@@ -98,7 +98,7 @@ public class KakaoService {
         long id = (long) jsonObj.get("id");
         String nickname = String.valueOf(profile.get("nickname"));
 
-        return kakaoDTO.builder()
+        return KakaoDTO.builder()
                 .id(id)
                 .nickname(nickname).build();
     }
