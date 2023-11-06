@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("kakao")
+@RequestMapping("/kakao")
 public class authController {
 
     private final KakaoService kakaoService;
