@@ -13,9 +13,10 @@ public class homeController {
 
     @GetMapping("/login")
     public String login(Model model) {
-        model.addAttribute("kakaoUrl", kakaoService.getKakaoLogin());
-
-        return "index";
+//        model.addAttribute("kakaoUrl", kakaoService.getKakaoLogin());
+        String url = kakaoService.getKakaoLogin();
+        System.out.println(url);
+        return url;
     }
 }
     
