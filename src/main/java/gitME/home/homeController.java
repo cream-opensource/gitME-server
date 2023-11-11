@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class homeController {
     private final KakaoService kakaoService;
 
-    @GetMapping("/")
+    @GetMapping("/login")
     public String login(Model model) {
         model.addAttribute("kakaoUrl", kakaoService.getKakaoLogin());
 
         return "index";
     }
 }
+    
