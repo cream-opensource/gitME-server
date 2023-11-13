@@ -19,7 +19,17 @@ public class InterlinkService {
 
         String response = RestUtil.get(url, accessToken);
         JsonArray jsonArray = JsonUtil.parseJsonObjectArrayString(response);
-        return JsonUtil.jsonArrayToMapList(jsonArray);
+        List<Map<String, Object>> mapList = JsonUtil.jsonArrayToMapList(jsonArray);
+
+        for (Map<String, Object> map : mapList) {
+            Object nameValue = map.get("name");
+            if (nameValue != null) {
+                System.out.println(nameValue); // name 키에 해당하는 값을 출력
+            } else {
+                System.out.println("Name key is missing in this map");
+            }
+        }
+        return mapList;
     }
 
     public List<Map<String, Object>> getLangByRepo(String accessToken, List<Map<String, Object>> repositories) {
