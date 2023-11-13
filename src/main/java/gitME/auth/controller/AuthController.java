@@ -26,13 +26,11 @@ public class AuthController {
         return new RedirectView(url);
     }
 
-
     @GetMapping("/callback")
     public ResponseEntity<MsgEntity> callback(@RequestParam("code") String code) throws Exception {
         KakaoDTO kakaoInfo = kakaoService.getKakaoInfo(code);
 
         return ResponseEntity.ok()
                 .body(new MsgEntity("Success", kakaoInfo));
-
     }
 }
