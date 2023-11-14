@@ -1,9 +1,6 @@
 package gitME.github.controller;
 
-import com.google.gson.JsonElement;
 import gitME.github.service.GithubService;
-import gitME.github.service.InterlinkService;
-import gitME.global.common.MsgEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +15,6 @@ import java.util.Map;
 public class GitHubAuthController {
 
     private final GithubService githubService;
-    private final InterlinkService interlinkService;
 
     @Value("${client_id}")
     private String githubClientId;
