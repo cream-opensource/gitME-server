@@ -18,7 +18,7 @@ public class DBController {
 
     @PostMapping("/signUp")
     public void saveSignUp() {
-        System.out.println("통신완료 \n");
+        System.out.println("통신완료~ 집만들어줄게 \n");
     }
 
     @GetMapping("/user")
