@@ -32,6 +32,5 @@ public class KakaoAuthController {
 
         return ResponseEntity.ok()
                 .body(new MsgEntity("Success", kakaoInfo));
-
     }
 }
