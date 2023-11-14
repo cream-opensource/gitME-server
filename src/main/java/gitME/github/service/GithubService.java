@@ -1,6 +1,5 @@
 package gitME.github.service;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import gitME.global.util.JsonUtil;
 import gitME.global.util.RestUtil;
