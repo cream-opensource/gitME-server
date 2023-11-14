@@ -3,10 +3,14 @@ package gitME.github.controller;
 import com.google.gson.JsonElement;
 import gitME.github.service.GithubService;
 import gitME.github.service.InterlinkService;
+import gitME.global.common.MsgEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
+
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,11 +30,8 @@ public class GitHubAuthController {
     }
 
     @GetMapping("/callback")
-    public JsonElement callback(@RequestParam("code") String code) {
-        JsonElement accessToken = githubService.getAccessToken(code);
-        System.out.println("AccessToken = " + accessToken);
-
-        return accessToken; // test
+    public ResponseEntity<Map<String, String>> callback(@RequestParam("code") String code) {
+        Map<String, String> accessToken = githubService.getAccessToken(code);
+        return ResponseEntity.ok(accessToken); // test
     }
-
 }
