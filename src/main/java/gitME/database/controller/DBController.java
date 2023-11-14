@@ -16,6 +16,12 @@ public class DBController {
 
     private final JpaTestService jpaTestService;
 
+    @PostMapping("/signUp")
+    public ResponseEntity<> saveSignUp() {
+        System.out.println("통신완료 \n");
+        return (ResponseEntity) ResponseEntity.ok();
+    }
+
     @GetMapping("/user")
     public ResponseEntity<List<User>> findUser() {
         return ResponseEntity.ok(jpaTestService.findAllUser());

@@ -33,7 +33,6 @@ public class GithubService {
 
         String response = RestUtil.post(url, body);
         JsonObject jsonObject = JsonUtil.parseJsonObjectString(response);
-        System.out.println("jsonObject.get(\"access_token\") = " + jsonObject.get("access_token").getAsString());
 
         return Map.of("AccessToken", jsonObject.get("access_token").getAsString());
     }
