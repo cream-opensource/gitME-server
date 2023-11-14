@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.util.Map;
+
 @Service
 @Transactional
 
@@ -21,7 +23,7 @@ public class GithubService {
     @Value("${client_secret}")
     private String githubClientSecret;
 
-    public JsonElement getAccessToken(String code) {
+    public Map<String, String> getAccessToken(String code) {
         String url = "https://github.com/login/oauth/access_token";
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
@@ -31,9 +33,9 @@ public class GithubService {
 
         String response = RestUtil.post(url, body);
         JsonObject jsonObject = JsonUtil.parseJsonObjectString(response);
+        System.out.println("jsonObject.get(\"access_token\") = " + jsonObject.get("access_token").getAsString());
 
-        System.out.println("jsonObject = " + jsonObject);
-        return jsonObject.get("access_token");
+        return Map.of("AccessToken", jsonObject.get("access_token").getAsString());
     }
 
 }

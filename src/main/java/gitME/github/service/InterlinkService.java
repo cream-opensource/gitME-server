@@ -18,7 +18,7 @@ public class InterlinkService {
         String url = "https://api.github.com/user/repos";
 
         String response = RestUtil.get(url, accessToken);
-        JsonArray jsonArray = JsonUtil.parseJsonObjectArrayString(response);
+        JsonArray jsonArray = JsonUtil.parseJsonArrayString(response);
         List<Map<String, Object>> mapList = JsonUtil.jsonArrayToMapList(jsonArray);
 
         for (Map<String, Object> map : mapList) {
