@@ -16,10 +16,10 @@ import java.util.Map;
 
 public class GithubService {
 
-    @Value("${client_id}")
+    @Value("${GITHUB_CLIENT_ID}")
     private String githubClientId;
 
-    @Value("${client_secret}")
+    @Value("${GITHUB_CLIENT_SECRET}")
     private String githubClientSecret;
 
     public Map<String, String> getAccessToken(String code) {

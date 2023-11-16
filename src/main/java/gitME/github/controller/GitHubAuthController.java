@@ -16,7 +16,7 @@ public class GitHubAuthController {
 
     private final GithubService githubService;
 
-    @Value("${client_id}")
+    @Value("${GITHUB_CLIENT_ID}")
     private String githubClientId;
 
     @GetMapping("/login")
