@@ -1,4 +1,4 @@
-package gitME.github.service;
+package gitME.uncategorized.service;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

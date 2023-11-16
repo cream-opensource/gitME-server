@@ -1,4 +1,4 @@
-package gitME.database.controller;
+package gitME.uncategorized.service;
 
 import gitME.database.entity.*;
 import gitME.database.repository.*;

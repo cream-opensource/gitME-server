@@ -1,4 +1,4 @@
-package gitME.github.service;
+package gitME.auth.github.service;
 
 import com.google.gson.JsonObject;
 import gitME.global.util.JsonUtil;

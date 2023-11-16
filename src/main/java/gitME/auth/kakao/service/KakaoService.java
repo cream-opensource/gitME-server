@@ -1,6 +1,6 @@
-package gitME.kakao.kakaoAuth.service;
+package gitME.auth.kakao.service;
 
-import gitME.kakao.kakaoAuth.dto.KakaoDTO;
+import gitME.auth.kakao.dto.KakaoDTO;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,13 +15,13 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class KakaoService {
-    @Value("${kakao.client.id}")
+    @Value("${KAKAO_CLIENT_ID}")
     private String KAKAO_CLIENT_ID;
 
-    @Value("${kakao.client.secret}")
+    @Value("${KAKAO_CLIENT_SECRET}")
     private String KAKAO_CLIENT_SECRET;
 
-    @Value("${kakao.redirect.url}")
+    @Value("${KAKAO_REDIRECT_URL}")
     private String KAKAO_REDIRECT_URL;
 
     private final static String KAKAO_AUTH_URI = "https://kauth.kakao.com";
