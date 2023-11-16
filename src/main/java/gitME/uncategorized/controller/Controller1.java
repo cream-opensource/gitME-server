@@ -1,6 +1,7 @@
-package gitME.database.controller;
+package gitME.uncategorized.controller;
 
 import gitME.database.entity.*;
+import gitME.uncategorized.service.JpaTestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,14 +13,9 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class DBController {
+public class Controller1 {
 
     private final JpaTestService jpaTestService;
-
-    @PostMapping("/signUp")
-    public void saveSignUp() {
-        System.out.println("통신 확인 \n");
-    }
 
     @GetMapping("/user")
     public ResponseEntity<List<User>> findUser() {
