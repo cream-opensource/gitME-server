@@ -1,14 +1,13 @@
 package gitME.uncategorized.controller;
 
 import gitME.uncategorized.dto.SignUpDataDTO;
+import gitME.uncategorized.service.InterlinkService;
 import gitME.uncategorized.service.SignUpService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,6 +15,8 @@ public class SignUpController {
 
     @Autowired
     private SignUpService signUpService;
+    @Autowired
+    private InterlinkService interlinkService;
 
     @PostMapping("/signUp")
     public ResponseEntity<String> submitSignUpData(@RequestBody SignUpDataDTO signUpDataDTO) {
@@ -27,4 +28,9 @@ public class SignUpController {
         }
     }
 
+    @GetMapping("/gitinfo/{assesstoken}")
+    public ResponseEntity<String> getGitInfo(@PathVariable("assesstoken") String token) {
+        interlinkService.getGitInfo(token);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("good");
+    }
 }
