@@ -4,31 +4,28 @@ import gitME.global.util.JsonUtil;
 import gitME.global.util.RestUtil;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Service
 public class InterlinkService {
-
-    public String getGitInfo(String accessToken) {
+    public Map<String, String> getGitInfo(String accessToken) {
         String url = "https://api.github.com/user";
 
         String response = RestUtil.get(url, accessToken);
         Map<String, Object> gitInfoMap = JsonUtil.jsonObjectToMap(JsonUtil.parseJsonObjectString(response));
 
         String nickname = String.valueOf(gitInfoMap.get("login"));
-        System.out.println("Login: " + nickname);
-
         String avatarUrl = String.valueOf(gitInfoMap.get("avatar_url"));
-        System.out.println("Avatar URL: " + avatarUrl);
+        String followers = String.valueOf(gitInfoMap.get("followers"));
+        String following = String.valueOf(gitInfoMap.get("following"));
 
-        int followers = ((Number) gitInfoMap.get("followers")).intValue();
-        System.out.println("Followers: " + followers);
+        Map<String, String> resultMap = new HashMap<>();
+        resultMap.put("nickname", nickname);
+        resultMap.put("avatarUrl", avatarUrl);
+        resultMap.put("followers", followers);
+        resultMap.put("following", following);
 
-        int following = ((Number) gitInfoMap.get("following")).intValue();
-        System.out.println("Following: " + following);
-
-
-        return nickname;
-
+        return resultMap;
     }
 }

@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 public class SignUpController {
@@ -29,8 +31,8 @@ public class SignUpController {
     }
 
     @GetMapping("/gitinfo/{assesstoken}")
-    public ResponseEntity<String> getGitInfo(@PathVariable("assesstoken") String token) {
-        interlinkService.getGitInfo(token);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("good");
+    public Map<String, String> getGitInfo(@PathVariable("assesstoken") String token) {
+        Map<String, String> gitInfo = interlinkService.getGitInfo(token);
+        return gitInfo;
     }
 }
