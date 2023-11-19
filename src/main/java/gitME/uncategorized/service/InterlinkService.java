@@ -6,17 +6,16 @@ import org.kohsuke.github.*;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class InterlinkService {
     GitHub github;
 
-    public Map<String, String> getGitInfo(String accessToken) {
+    public Map<String, String> getGitInfo(String token) {
         String url = "https://api.github.com/user";
 
-        String response = RestUtil.get(url, accessToken);
+        String response = RestUtil.get(url, token);
         Map<String, Object> gitInfoMap = JsonUtil.jsonObjectToMap(JsonUtil.parseJsonObjectString(response));
 
         String nickname = String.valueOf(gitInfoMap.get("login"));
@@ -43,7 +42,7 @@ public class InterlinkService {
         GHCommitSearchBuilder builder = github.searchCommits()
                 .author(name);
 
-        PagedSearchIterable<GHCommit> commits = builder.list().withPageSize(7);
+        PagedSearchIterable<GHCommit> commits = builder.list().withPageSize(10);
         int totalCommits = commits.getTotalCount();
         System.out.println("totalCommits: " + totalCommits);
     }
@@ -52,4 +51,28 @@ public class InterlinkService {
         github = new GitHubBuilder().withOAuthToken(token).build();
         github.checkApiUrlValidity();
     }
+
+    public void getLanguages(String token) {
+        String repoUrl = "https://api.github.com/user/repos";
+
+        String repoResponse = RestUtil.get(repoUrl, token);
+        List<Map<String, Object>> repos = JsonUtil.jsonArrayToMapList(JsonUtil.parseJsonArrayString(repoResponse));
+
+        List<String> repoNames = new ArrayList<>();
+        for (Map<String, Object> repo : repos) {
+            repoNames.add((String) repo.get("full_name"));
+        }
+
+        for (String repoName : repoNames) {
+            String url = "https://api.github.com/repos/" + repoName +"/languages";
+            String response = RestUtil.get(url, token);
+
+            Map<String, Object> gitLangMap = JsonUtil.jsonObjectToMap(JsonUtil.parseJsonObjectString(response));
+
+            System.out.println(repoName + ": " + gitLangMap);
+        }
+    }
+
+
+
 }
