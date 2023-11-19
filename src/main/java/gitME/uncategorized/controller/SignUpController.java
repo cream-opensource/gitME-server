@@ -31,9 +31,10 @@ public class SignUpController {
     }
 
     @GetMapping("/gitinfo/{assesstoken}")
-    public Map<String, String> getGitInfo(@PathVariable("assesstoken") String token) {
+    public void getGitInfo(@PathVariable("assesstoken") String token) {
         Map<String, String> gitInfo = interlinkService.getGitInfo(token);
         interlinkService.getCommits(token, gitInfo.get("nickname"));
-        return gitInfo;
+        interlinkService.getLanguages(token);
+        interlinkService.getStars(token);
     }
 }

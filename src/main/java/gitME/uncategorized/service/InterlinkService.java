@@ -73,6 +73,13 @@ public class InterlinkService {
         }
     }
 
+    public void getStars(String token) {
+        String url = "https://api.github.com/user/starred";
 
+        String response = RestUtil.get(url, token);
+        List<Map<String, Object>> gitInfoMap = JsonUtil.jsonArrayToMapList(JsonUtil.parseJsonArrayString(response));
+
+        System.out.println(gitInfoMap.size());
+    }
 
 }
