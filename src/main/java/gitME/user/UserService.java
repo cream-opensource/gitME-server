@@ -1,14 +1,14 @@
-package gitME.uncategorized.service;
+package gitME.user;
 
-import gitME.global.util.JsonUtil;
-import gitME.global.util.RestUtil;
+import gitME.common.util.JsonUtil;
+import gitME.common.util.RestUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class InterlinkService {
+public class UserService {
     public Map<String, String> getGitInfo(String accessToken) {
         String url = "https://api.github.com/user";
 

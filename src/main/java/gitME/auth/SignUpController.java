@@ -1,15 +1,12 @@
-package gitME.uncategorized.controller;
+package gitME.auth;
 
 import gitME.uncategorized.dto.SignUpDataDTO;
-import gitME.uncategorized.service.InterlinkService;
-import gitME.uncategorized.service.SignUpService;
+import gitME.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,8 +14,6 @@ public class SignUpController {
 
     @Autowired
     private SignUpService signUpService;
-    @Autowired
-    private InterlinkService interlinkService;
 
     @PostMapping("/signUp")
     public ResponseEntity<String> submitSignUpData(@RequestBody SignUpDataDTO signUpDataDTO) {
@@ -28,11 +23,5 @@ public class SignUpController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error during userSignUpData post");
         }
-    }
-
-    @GetMapping("/gitinfo/{assesstoken}")
-    public Map<String, String> getGitInfo(@PathVariable("assesstoken") String token) {
-        Map<String, String> gitInfo = interlinkService.getGitInfo(token);
-        return gitInfo;
     }
 }

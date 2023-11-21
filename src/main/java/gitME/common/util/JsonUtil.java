@@ -1,4 +1,4 @@
-package gitME.global.util;
+package gitME.common.util;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;

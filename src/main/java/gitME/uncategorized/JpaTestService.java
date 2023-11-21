@@ -1,6 +1,6 @@
-package gitME.uncategorized.service;
+package gitME.uncategorized;
 
-import gitME.database.entity.*;
+import gitME.database.entites.*;
 import gitME.database.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

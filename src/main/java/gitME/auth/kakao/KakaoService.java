@@ -1,4 +1,4 @@
-package gitME.auth.kakao.service;
+package gitME.auth.kakao;
 
 import gitME.auth.kakao.dto.KakaoDTO;
 import org.json.simple.JSONObject;

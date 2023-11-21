@@ -1,4 +1,4 @@
-package gitME.database.entity;
+package gitME.database.entites;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;

@@ -1,4 +1,4 @@
-package gitME.global.util;
+package gitME.common.util;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

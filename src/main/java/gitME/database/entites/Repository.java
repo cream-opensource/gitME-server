@@ -1,4 +1,4 @@
-package gitME.database.entity;
+package gitME.database.entites;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;

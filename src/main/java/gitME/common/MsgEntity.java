@@ -1,4 +1,4 @@
-package gitME.global.common;
+package gitME.common;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;

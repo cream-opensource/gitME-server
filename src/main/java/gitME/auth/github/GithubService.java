@@ -1,8 +1,8 @@
-package gitME.auth.github.service;
+package gitME.auth.github;
 
 import com.google.gson.JsonObject;
-import gitME.global.util.JsonUtil;
-import gitME.global.util.RestUtil;
+import gitME.common.util.JsonUtil;
+import gitME.common.util.RestUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
