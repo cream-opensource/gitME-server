@@ -1,7 +1,6 @@
 package gitME.uncategorized;
 
-import gitME.database.entites.*;
-import gitME.database.repository.*;
+
 import gitME.entity.*;
 import gitME.repository.*;
 import lombok.RequiredArgsConstructor;
