@@ -20,9 +20,7 @@ public class KakaoAuthController {
 
     @GetMapping("/login")
     public RedirectView login(Model model) {
-        String url = kakaoService.getKakaoLogin();
-
-        return new RedirectView(url);
+        return new RedirectView(kakaoService.getKakaoLogin());
     }
 
     @GetMapping("/callback")

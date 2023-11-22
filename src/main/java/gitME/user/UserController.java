@@ -17,8 +17,10 @@ public class UserController {
     private UserService interlinkService;
 
     @GetMapping("/gitinfo/{assesstoken}")
-    public Map<String, String> getGitInfo(@PathVariable("assesstoken") String token) {
+    public void getGitInfo(@PathVariable("assesstoken") String token) {
         Map<String, String> gitInfo = interlinkService.getGitInfo(token);
-        return gitInfo;
+        interlinkService.getCommits(token, gitInfo.get("nickname"));
+        interlinkService.getLanguages(token);
+        interlinkService.getStars(token);
     }
 }
