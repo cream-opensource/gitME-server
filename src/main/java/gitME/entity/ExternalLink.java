@@ -1,4 +1,4 @@
-package gitME.database.entites;
+package gitME.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

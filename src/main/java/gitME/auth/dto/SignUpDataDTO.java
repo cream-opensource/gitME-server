@@ -1,4 +1,4 @@
-package gitME.uncategorized.dto;
+package gitME.auth.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

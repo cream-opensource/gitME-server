@@ -1,6 +1,6 @@
-package gitME.database.repository;
+package gitME.repository;
 
-import gitME.database.entites.User;
+import gitME.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Integer> {

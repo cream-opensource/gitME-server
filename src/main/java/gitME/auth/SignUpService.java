@@ -1,6 +1,6 @@
 package gitME.auth;
 
-import gitME.uncategorized.dto.SignUpDataDTO;
+import gitME.auth.dto.SignUpDataDTO;
 import org.springframework.stereotype.Service;
 
 /**

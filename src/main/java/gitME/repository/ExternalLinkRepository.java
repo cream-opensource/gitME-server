@@ -1,6 +1,6 @@
-package gitME.database.repository;
+package gitME.repository;
 
-import gitME.database.entites.ExternalLink;
+import gitME.entity.ExternalLink;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ExternalLinkRepository extends JpaRepository<ExternalLink, Integer> {

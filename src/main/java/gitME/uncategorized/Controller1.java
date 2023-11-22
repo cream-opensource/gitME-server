@@ -1,7 +1,6 @@
 package gitME.uncategorized;
 
-import gitME.database.entites.*;
-import gitME.uncategorized.JpaTestService;
+import gitME.entity.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
