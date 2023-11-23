@@ -43,8 +43,8 @@ jobs:
                    secret: SPRING_DATASOURCE_URL
                  - name: SPRING_DATASOURCE_USERNAME
                    secret: SPRING_DATASOURCE_USERNAME
-              ports: 8080
-            context:
-              git:
-                url: git@github.com:${{ github.repository }}.git
-                ref: ${{ github.ref }}
+          ports: 8080
+          context:
+            git:
+              url: git@github.com:${{ github.repository }}.git
+              ref: ${{ github.ref }}
