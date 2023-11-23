@@ -1,17 +1,18 @@
 package gitME.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
 import lombok.Data;
 
 @Entity
 @Data
+@IdClass(CodeStackId.class)
 public class CodeStack {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userIdx;
+    @Id
     private String language;
     private int codeCount;
-
 }

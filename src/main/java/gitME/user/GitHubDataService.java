@@ -1,7 +1,11 @@
 package gitME.user;
 
-import gitME.common.util.JsonUtil;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import gitME.common.util.RestUtil;
+import gitME.entity.vo.GitHubData;
+import gitME.entity.vo.GitHubRepositoryResponse;
+import gitME.entity.vo.GitHubUserResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.kohsuke.github.*;
 import org.springframework.stereotype.Service;
@@ -11,105 +15,152 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * File: GitHubDataService.java
+ * Desc: GitHub 데이터 조회 서비스 클래스
+ */
 @Slf4j
 @Service
 public class GitHubDataService {
-    GitHub github;
 
-    private void connectToGithub(String token) throws IOException {
-        github = new GitHubBuilder().withOAuthToken(token).build();
-        github.checkApiUrlValidity();
-    }
+    private static final Gson gson = new Gson();
 
-    public Map<String, Object> getGitAllInfo(String accessToken) {
-
+    /**
+     * GitHub 데이터 조회
+     * @param accessToken GitHub 접근 토큰
+     * @return GitHub 데이터
+     */
+    public GitHubData getData(String accessToken) throws Exception {
         try {
-            Map<String, Object> gitBasicInfo = getGitBasicInfo(accessToken);
-            int commitCount = getCommits(accessToken, (String) gitBasicInfo.get("nickname"));
-            Map<String, Object> repoLanguages = getLanguages(accessToken);
-            int starCount = getStars(accessToken);
+            // GitHub 사용자 저장소 정보 조회
+            GitHubUserResponse gitHubUserResponse = getUser(accessToken);
 
-            Map<String, Object> allInfo = new HashMap<>();
-            allInfo.putAll(gitBasicInfo);
-            allInfo.put("commitCount", commitCount);
-            allInfo.put("languages", repoLanguages);
-            allInfo.put("starCount", starCount);
+            // GitHub 스타를 준 저장소 정보 조회
+            int totalStars = getStarredRepositoryList(accessToken).size();
 
-            return allInfo;
+            // GitHub 사용자 총 커밋 수 조회
+            int totalCommits = getCommitCount(accessToken, gitHubUserResponse);
+
+            // GitHub 저장소 사용 언어 정보 모음 조회
+            Map<String, Integer> aggregateLanguages = getAggregateLanguages(accessToken);
+
+            return GitHubData.builder()
+                    .nickname(gitHubUserResponse.getLogin())
+                    .avatarUrl(gitHubUserResponse.getAvatarUrl())
+                    .followers(gitHubUserResponse.getFollowers())
+                    .following(gitHubUserResponse.getFollowing())
+                    .totalStars(totalStars)
+                    .totalCommits(totalCommits)
+                    .languages(aggregateLanguages)
+                    .build();
         } catch (Exception e) {
-            log.error("getGitAllInfo: error", e);
+            log.error("Fail to connect GitHub or retrieve data", e);
             throw e;
         }
-
     }
 
-    public Map<String, Object> getGitBasicInfo(String accessToken) {
-        String url = "https://api.github.com/user";
-
-        String response = RestUtil.get(url, accessToken);
-        Map<String, Object> gitInfoMap = JsonUtil.parseJsonObjectToMap(JsonUtil.parseStringToJsonObject(response));
-
-        String nickname = String.valueOf(gitInfoMap.get("login"));
-        String avatarUrl = String.valueOf(gitInfoMap.get("avatar_url"));
-        Object followers = gitInfoMap.get("followers");;
-        Object following = gitInfoMap.get("following");
-
-        Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("nickname", nickname);
-        resultMap.put("avatarUrl", avatarUrl);
-        resultMap.put("followers", followers);
-        resultMap.put("following", following);
-
-        return resultMap;
-    }
-
-    public int getCommits(String accessToken, String name) {
+    /**
+     * GitHub 사용자 저장소 정보 조회
+     * @param accessToken GitHub 접근 토큰
+     * @return GitHub 사용자 저장소 정보
+     */
+    public GitHubUserResponse getUser(String accessToken) {
         try {
-            connectToGithub(accessToken);
-        } catch (IOException e) {
-            throw new IllegalArgumentException("github token 연결에 실패하였습니다.");
-        }
-
-        GHCommitSearchBuilder builder = github.searchCommits()
-                .author(name);
-
-        PagedSearchIterable<GHCommit> commits = builder.list().withPageSize(10);
-        return commits.getTotalCount();
-    }
-
-    public Map<String, Object> getLanguages(String accessToken) {
-        String repoUrl = "https://api.github.com/user/repos";
-        String repoResponse = RestUtil.get(repoUrl, accessToken);
-        List<Map<String, Object>> repos = JsonUtil.parseJsonArrayToMapList(JsonUtil.parseStringToJsonArray(repoResponse));
-
-        Map<String, Object> aggregatedLanguages = new HashMap<>();
-
-        for (Map<String, Object> repo : repos) {
-            String repoName = (String) repo.get("full_name");
-            String url = "https://api.github.com/repos/" + repoName + "/languages";
+            String url = "https://api.github.com/user";
             String response = RestUtil.get(url, accessToken);
-
-            Map<String, Object> gitLangMap = JsonUtil.parseJsonObjectToMap(JsonUtil.parseStringToJsonObject(response));
-
-            for (Map.Entry<String, Object> entry : gitLangMap.entrySet()) {
-                String language = entry.getKey();
-                Double count = (Double) entry.getValue();
-
-                aggregatedLanguages.merge(language, count, (oldValue, newValue) -> ((Double) oldValue) + ((Double) newValue));
-            }
+            return gson.fromJson(response, GitHubUserResponse.class);
+        } catch (Exception e) {
+            log.error("Fail to retrieve user from GitHub", e);
+            throw e;
         }
-
-        return aggregatedLanguages;
     }
 
-
-    public int getStars(String accessToken) {
-        String url = "https://api.github.com/user/starred";
-
-        String response = RestUtil.get(url, accessToken);
-        List<Map<String, Object>> gitInfoMap = JsonUtil.parseJsonArrayToMapList(JsonUtil.parseStringToJsonArray(response));
-
-        return gitInfoMap.size();
+    /**
+     * GitHub 사용자 저장소 정보 조회
+     * @param accessToken GitHub 접근 토큰
+     * @return GitHub 사용자 저장소 정보
+     */
+    public List<GitHubRepositoryResponse> getRepositoryList(String accessToken) {
+        try {
+            String url = "https://api.github.com/user/repos";
+            String response = RestUtil.get(url, accessToken);
+            return gson.fromJson(response, new TypeToken<List<GitHubRepositoryResponse>>() {}.getType());
+        } catch (Exception e) {
+            log.error("Fail to retrieve repository list from GitHub", e);
+            throw e;
+        }
     }
 
+    /**
+     * GitHub 스타를 준 저장소 정보 조회
+     * @param accessToken GitHub 접근 토큰
+     * @return GitHub 스타를 준 저장소 정보
+     */
+    public List<GitHubRepositoryResponse> getStarredRepositoryList(String accessToken) {
+        try {
+            String url = "https://api.github.com/user/starred";
+            String response = RestUtil.get(url, accessToken);
+            return gson.fromJson(response, new TypeToken<List<GitHubRepositoryResponse>>() {}.getType());
+        } catch (Exception e) {
+            log.error("Fail to retrieve starred repositories from GitHub", e);
+            throw e;
+        }
+    }
+
+    /**
+     * GitHub 저장소 사용 언어 정보 조회
+     * @param accessToken GitHub 접근 토큰
+     * @param repository
+     * @return GitHub 저장소 사용 언어 정보
+     */
+    private Map<String, Integer> getLanguagesFromRepository(String accessToken, GitHubRepositoryResponse repository) {
+        try {
+            String url = "https://api.github.com/repos/" + repository.getFullName() + "/languages";
+            String response = RestUtil.get(url, accessToken);
+            return gson.fromJson(response, new TypeToken<Map<String, Integer>>() {}.getType());
+        } catch (Exception e) {
+            log.error("Fail to retrieve languages from GitHub repository", e);
+            throw e;
+        }
+    }
+
+    /**
+     * GitHub 저장소 사용 언어 정보 모음 조회
+     * @param accessToken GitHub 접근 토큰
+     * @return GitHub 저장소 사용 언어 정보 모음
+     */
+    public Map<String, Integer> getAggregateLanguages(String accessToken) {
+        try {
+            List<GitHubRepositoryResponse> repositoryList = getRepositoryList(accessToken);
+
+            Map<String, Integer> aggregatedLanguages = new HashMap<>();
+            for (GitHubRepositoryResponse repository : repositoryList) {
+                Map<String, Integer> gitLangMap = getLanguagesFromRepository(accessToken, repository);
+                gitLangMap.forEach((language, count) -> aggregatedLanguages.merge(language, count, Integer::sum));
+            }
+            return aggregatedLanguages;
+        } catch (Exception e) {
+            log.error("Fail to aggregate languages from GitHub repositories", e);
+            throw e;
+        }
+    }
+
+    /**
+     * GitHub 사용자 총 커밋 수 조회
+     * @param accessToken GitHub 접근 토큰
+     * @param user
+     * @return GitHub 사용자 총 커밋 수
+     */
+    public int getCommitCount(String accessToken, GitHubUserResponse user) throws IOException {
+        try {
+            GitHub github = new GitHubBuilder().withOAuthToken(accessToken).build();
+            github.checkApiUrlValidity();
+            GHCommitSearchBuilder commitSearch = github.searchCommits().author(user.getLogin());
+            PagedSearchIterable<GHCommit> commits = commitSearch.list();
+            return commits.getTotalCount();
+        } catch (IOException e) {
+            log.error("Fail to retrieve commit count from GitHub", e);
+            throw e;
+        }
+    }
 }
