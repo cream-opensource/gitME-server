@@ -1,8 +1,11 @@
 package gitME.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.List;
+
 import lombok.Data;
 
 @Entity
@@ -13,10 +16,9 @@ public class User {
     private int idx;
     private String kakaoId;
     private String name;
-    private Date birthDate;
-    private String gender;
+    private String birthDate;
     private String email;
     private String phone;
-    private Date createDate;
-    private Date updateDate;
+    private String createDate;
+    private String updateDate;
 }
