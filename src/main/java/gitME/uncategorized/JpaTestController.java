@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class Controller1 {
+public class JpaTestController {
 
     private final JpaTestService jpaTestService;
 

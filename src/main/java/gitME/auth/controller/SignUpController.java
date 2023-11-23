@@ -1,5 +1,6 @@
-package gitME.auth;
+package gitME.auth.controller;
 
+import gitME.auth.service.SignUpService;
 import gitME.auth.dto.SignUpDataDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

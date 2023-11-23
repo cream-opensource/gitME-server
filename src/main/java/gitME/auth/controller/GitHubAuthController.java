@@ -1,5 +1,6 @@
-package gitME.auth.github;
+package gitME.auth.controller;
 
+import gitME.auth.service.GithubService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;

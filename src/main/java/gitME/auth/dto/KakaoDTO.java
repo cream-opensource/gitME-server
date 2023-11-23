@@ -1,4 +1,4 @@
-package gitME.auth.kakao.dto;
+package gitME.auth.dto;
 
 import lombok.Builder;
 import lombok.Data;
