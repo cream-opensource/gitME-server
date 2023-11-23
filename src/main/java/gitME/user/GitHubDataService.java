@@ -7,14 +7,13 @@ import org.kohsuke.github.*;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Slf4j
 @Service
-public class UserService {
+public class GitHubDataService {
     GitHub github;
 
     private void connectToGithub(String token) throws IOException {
@@ -25,8 +24,8 @@ public class UserService {
     public Map<String, Object> getGitAllInfo(String accessToken) {
 
         try {
-            Map<String, String> gitBasicInfo = getGitBasicInfo(accessToken);
-            int commitCount = getCommits(accessToken, gitBasicInfo.get("nickname"));
+            Map<String, Object> gitBasicInfo = getGitBasicInfo(accessToken);
+            int commitCount = getCommits(accessToken, (String) gitBasicInfo.get("nickname"));
             Map<String, Object> repoLanguages = getLanguages(accessToken);
             int starCount = getStars(accessToken);
 
@@ -44,18 +43,18 @@ public class UserService {
 
     }
 
-    public Map<String, String> getGitBasicInfo(String accessToken) {
+    public Map<String, Object> getGitBasicInfo(String accessToken) {
         String url = "https://api.github.com/user";
 
         String response = RestUtil.get(url, accessToken);
-        Map<String, Object> gitInfoMap = JsonUtil.jsonObjectToMap(JsonUtil.parseJsonObjectString(response));
+        Map<String, Object> gitInfoMap = JsonUtil.parseJsonObjectToMap(JsonUtil.parseStringToJsonObject(response));
 
         String nickname = String.valueOf(gitInfoMap.get("login"));
         String avatarUrl = String.valueOf(gitInfoMap.get("avatar_url"));
-        String followers = String.valueOf(gitInfoMap.get("followers"));
-        String following = String.valueOf(gitInfoMap.get("following"));
+        Object followers = gitInfoMap.get("followers");;
+        Object following = gitInfoMap.get("following");
 
-        Map<String, String> resultMap = new HashMap<>();
+        Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("nickname", nickname);
         resultMap.put("avatarUrl", avatarUrl);
         resultMap.put("followers", followers);
@@ -81,7 +80,7 @@ public class UserService {
     public Map<String, Object> getLanguages(String accessToken) {
         String repoUrl = "https://api.github.com/user/repos";
         String repoResponse = RestUtil.get(repoUrl, accessToken);
-        List<Map<String, Object>> repos = JsonUtil.jsonArrayToMapList(JsonUtil.parseJsonArrayString(repoResponse));
+        List<Map<String, Object>> repos = JsonUtil.parseJsonArrayToMapList(JsonUtil.parseStringToJsonArray(repoResponse));
 
         Map<String, Object> aggregatedLanguages = new HashMap<>();
 
@@ -90,13 +89,13 @@ public class UserService {
             String url = "https://api.github.com/repos/" + repoName + "/languages";
             String response = RestUtil.get(url, accessToken);
 
-            Map<String, Object> gitLangMap = JsonUtil.jsonObjectToMap(JsonUtil.parseJsonObjectString(response));
+            Map<String, Object> gitLangMap = JsonUtil.parseJsonObjectToMap(JsonUtil.parseStringToJsonObject(response));
 
             for (Map.Entry<String, Object> entry : gitLangMap.entrySet()) {
                 String language = entry.getKey();
-                Number count = (Number) entry.getValue();
+                Double count = (Double) entry.getValue();
 
-                aggregatedLanguages.merge(language, count, (oldValue, newValue) -> ((Number) oldValue).doubleValue() + ((Number) newValue).doubleValue());
+                aggregatedLanguages.merge(language, count, (oldValue, newValue) -> ((Double) oldValue) + ((Double) newValue));
             }
         }
 
@@ -108,7 +107,7 @@ public class UserService {
         String url = "https://api.github.com/user/starred";
 
         String response = RestUtil.get(url, accessToken);
-        List<Map<String, Object>> gitInfoMap = JsonUtil.jsonArrayToMapList(JsonUtil.parseJsonArrayString(response));
+        List<Map<String, Object>> gitInfoMap = JsonUtil.parseJsonArrayToMapList(JsonUtil.parseStringToJsonArray(response));
 
         return gitInfoMap.size();
     }

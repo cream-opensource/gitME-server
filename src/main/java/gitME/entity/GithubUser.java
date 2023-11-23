@@ -20,7 +20,8 @@ public class GithubUser {
     private int following;
     private int totalStars;
     private int totalCommits;
-    private Date refreshDate;
+    private String avatarUrl;
+    private String refreshDate;
 
     @OneToMany(mappedBy = "githubUser")
     @JsonManagedReference
