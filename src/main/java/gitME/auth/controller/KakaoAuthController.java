@@ -1,6 +1,7 @@
-package gitME.auth.kakao;
+package gitME.auth.controller;
 
-import gitME.auth.kakao.dto.KakaoDTO;
+import gitME.auth.dto.KakaoDTO;
+import gitME.auth.service.KakaoService;
 import gitME.common.MsgEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

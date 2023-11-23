@@ -2,6 +2,7 @@ package gitME.user;
 
 import gitME.common.util.JsonUtil;
 import gitME.common.util.RestUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.kohsuke.github.*;
 import org.springframework.stereotype.Service;
 
@@ -11,11 +12,39 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class UserService {
     GitHub github;
 
-    public Map<String, String> getGitInfo(String accessToken) {
+    private void connectToGithub(String token) throws IOException {
+        github = new GitHubBuilder().withOAuthToken(token).build();
+        github.checkApiUrlValidity();
+    }
+
+    public Map<String, Object> getGitAllInfo(String accessToken) {
+
+        try {
+            Map<String, String> gitBasicInfo = getGitBasicInfo(accessToken);
+            int commitCount = getCommits(accessToken, gitBasicInfo.get("nickname"));
+            Map<String, Object> repoLanguages = getLanguages(accessToken);
+            int starCount = getStars(accessToken);
+
+            Map<String, Object> allInfo = new HashMap<>();
+            allInfo.putAll(gitBasicInfo);
+            allInfo.put("commitCount", commitCount);
+            allInfo.put("languages", repoLanguages);
+            allInfo.put("starCount", starCount);
+
+            return allInfo;
+        } catch (Exception e) {
+            log.error("getGitAllInfo: error", e);
+            throw e;
+        }
+
+    }
+
+    public Map<String, String> getGitBasicInfo(String accessToken) {
         String url = "https://api.github.com/user";
 
         String response = RestUtil.get(url, accessToken);
@@ -35,9 +64,9 @@ public class UserService {
         return resultMap;
     }
 
-    public void getCommits(String token, String name) {
+    public int getCommits(String accessToken, String name) {
         try {
-            connectToGithub(token);
+            connectToGithub(accessToken);
         } catch (IOException e) {
             throw new IllegalArgumentException("github token 연결에 실패하였습니다.");
         }
@@ -46,43 +75,42 @@ public class UserService {
                 .author(name);
 
         PagedSearchIterable<GHCommit> commits = builder.list().withPageSize(10);
-        int totalCommits = commits.getTotalCount();
-        System.out.println("totalCommits: " + totalCommits);
+        return commits.getTotalCount();
     }
 
-    private void connectToGithub(String token) throws IOException {
-        github = new GitHubBuilder().withOAuthToken(token).build();
-        github.checkApiUrlValidity();
-    }
-
-    public void getLanguages(String token) {
+    public Map<String, Object> getLanguages(String accessToken) {
         String repoUrl = "https://api.github.com/user/repos";
-
-        String repoResponse = RestUtil.get(repoUrl, token);
+        String repoResponse = RestUtil.get(repoUrl, accessToken);
         List<Map<String, Object>> repos = JsonUtil.jsonArrayToMapList(JsonUtil.parseJsonArrayString(repoResponse));
 
-        List<String> repoNames = new ArrayList<>();
-        for (Map<String, Object> repo : repos) {
-            repoNames.add((String) repo.get("full_name"));
-        }
+        Map<String, Object> aggregatedLanguages = new HashMap<>();
 
-        for (String repoName : repoNames) {
-            String url = "https://api.github.com/repos/" + repoName +"/languages";
-            String response = RestUtil.get(url, token);
+        for (Map<String, Object> repo : repos) {
+            String repoName = (String) repo.get("full_name");
+            String url = "https://api.github.com/repos/" + repoName + "/languages";
+            String response = RestUtil.get(url, accessToken);
 
             Map<String, Object> gitLangMap = JsonUtil.jsonObjectToMap(JsonUtil.parseJsonObjectString(response));
 
-            System.out.println(repoName + ": " + gitLangMap);
+            for (Map.Entry<String, Object> entry : gitLangMap.entrySet()) {
+                String language = entry.getKey();
+                Number count = (Number) entry.getValue();
+
+                aggregatedLanguages.merge(language, count, (oldValue, newValue) -> ((Number) oldValue).doubleValue() + ((Number) newValue).doubleValue());
+            }
         }
+
+        return aggregatedLanguages;
     }
 
-    public void getStars(String token) {
+
+    public int getStars(String accessToken) {
         String url = "https://api.github.com/user/starred";
 
-        String response = RestUtil.get(url, token);
+        String response = RestUtil.get(url, accessToken);
         List<Map<String, Object>> gitInfoMap = JsonUtil.jsonArrayToMapList(JsonUtil.parseJsonArrayString(response));
 
-        System.out.println(gitInfoMap.size());
+        return gitInfoMap.size();
     }
 
 }

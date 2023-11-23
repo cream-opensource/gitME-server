@@ -1,6 +1,6 @@
-package gitME.auth.kakao;
+package gitME.auth.service;
 
-import gitME.auth.kakao.dto.KakaoDTO;
+import gitME.auth.dto.KakaoDTO;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
