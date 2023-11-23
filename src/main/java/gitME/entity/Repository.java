@@ -21,7 +21,4 @@ public class Repository {
     @JsonBackReference
     private GithubUser githubUser;
 
-    @OneToMany(mappedBy = "repository")
-    @JsonManagedReference
-    private List<CodeStack> codeStack;
 }
