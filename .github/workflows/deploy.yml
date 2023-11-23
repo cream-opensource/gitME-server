@@ -46,5 +46,5 @@ jobs:
               ports: "8080"
             context:
               git:
-                url: git@github.com:${{ github.repository }}.git
-                ref: ${{ github.ref }}
+                url: git@github.com:cream-opensource/gitME-server.git
+                ref: refs/heads/main
