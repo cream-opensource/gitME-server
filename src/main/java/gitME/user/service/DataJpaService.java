@@ -1,4 +1,4 @@
-package gitME.user;
+package gitME.user.service;
 
 import gitME.auth.dto.SignUpDataDTO;
 import gitME.entity.CodeStack;

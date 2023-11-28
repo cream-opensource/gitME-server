@@ -2,8 +2,8 @@ package gitME.auth.service;
 
 import gitME.auth.dto.SignUpDataDTO;
 import gitME.entity.vo.GitHubData;
-import gitME.user.DataJpaService;
-import gitME.user.GitHubDataService;
+import gitME.user.service.DataJpaService;
+import gitME.user.service.GitHubDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

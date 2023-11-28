@@ -1,4 +1,4 @@
-package gitME.user;
+package gitME.user.controller;
 
 import gitME.auth.dto.SignUpDataDTO;
 import lombok.RequiredArgsConstructor;
