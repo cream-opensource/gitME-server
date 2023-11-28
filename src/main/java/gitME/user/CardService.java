@@ -48,5 +48,14 @@ public class CardService {
         }
     }
 
+    @Transactional
+    public Map<String, Integer> getCodeStack(int user_idx) {
+        List<CodeStack> codeStacks = codeStackRepository.findByUserIdx(user_idx);
 
+        Map<String, Integer> codeStackMap = new HashMap<>();
+        for (CodeStack codeStack : codeStacks) {
+            codeStackMap.put(codeStack.getLanguage(), codeStack.getCodeCount());
+        }
+        return codeStackMap;
+    }
 }
