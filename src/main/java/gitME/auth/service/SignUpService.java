@@ -1,7 +1,7 @@
 package gitME.auth.service;
 
 import gitME.auth.dto.SignUpDataDTO;
-import gitME.entity.vo.GitHubData;
+import gitME.entity.dto.GitHubDataDTO;
 import gitME.user.DataJpaService;
 import gitME.user.GitHubDataService;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +19,11 @@ public class SignUpService {
     public void createUser(SignUpDataDTO signUpDataDTO) throws Exception {
         try {
             System.out.println("signUpDataDTO = " + signUpDataDTO);
-            GitHubData gitAllInfo = gitHubDataService.getData(signUpDataDTO.getGitAccessToken());
-            System.out.println("gitAllInfo = " + gitAllInfo);
+            GitHubDataDTO gitAllInfoDTO = gitHubDataService.getData(signUpDataDTO.getGitAccessToken());
+            System.out.println("gitAllInfo = " + gitAllInfoDTO);
 
             //받아온 데이터를 jpa를 사용해서 저장한다.
-            dataJpaService.saveData(signUpDataDTO, gitAllInfo);
+            dataJpaService.saveData(signUpDataDTO, gitAllInfoDTO);
 
         } catch (Exception e) {
             log.error("createUser: error", e);

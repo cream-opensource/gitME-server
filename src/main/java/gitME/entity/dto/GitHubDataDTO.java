@@ -1,4 +1,4 @@
-package gitME.entity.vo;
+package gitME.entity.dto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +14,7 @@ import java.util.Map;
  */
 @Builder
 @Getter @Setter
-public class GitHubData {
+public class GitHubDataDTO {
 
     private String nickname;                // 사용자 로그인 ID
     private String avatarUrl;               // 프로필 이미지 URL

@@ -13,7 +13,7 @@ import java.util.Date;
  * Desc: GitHub 사용자 저장소 정보 응답 VO
  */
 @Getter @Setter
-public class GitHubRepositoryResponse {
+public class GitHubRepositoryResponseVO {
 
     private String name;         // 저장소 이름
     @SerializedName("full_name")
