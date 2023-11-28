@@ -1,5 +1,6 @@
 package gitME.user;
 
+import gitME.entity.CodeStack;
 import gitME.entity.GithubUser;
 import gitME.entity.User;
 import gitME.repository.*;
@@ -9,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -17,9 +18,10 @@ import java.util.Optional;
 public class CardService {
     private final UserRepository userRepository;
     private final GithubUserRepository githubUserRepository;
-    private final RepositoryRepository repositoryRepository;
     private final CodeStackRepository codeStackRepository;
-    private final ExternalLinkRepository externalLinkRepository;
+
+
+
 
     @Transactional
     public User getUser(int user_idx){
@@ -32,4 +34,19 @@ public class CardService {
             String phone = user.getPhone();
         }
     }
+
+    @Transactional
+    public GithubUser getGithibUser(int user_idx){
+        GithubUser gitUser = githubUserRepository.findById(user_idx).orElse(null);
+        if (gitUser != null) {
+            String nickname = gitUser.getNickname();
+            int followers = gitUser.getFollowers();
+            int following = gitUser.getFollowing();
+            int star = gitUser.getTotalStars();
+            int commits = gitUser.getTotalCommits();
+            String phone = gitUser.getAvatarUrl();
+        }
+    }
+
+
 }
