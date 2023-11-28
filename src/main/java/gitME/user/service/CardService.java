@@ -8,6 +8,7 @@ import gitME.user.dto.totalInfoDTO;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -22,7 +23,7 @@ public class CardService {
 
 
     @Transactional
-    public totalInfoDTO getUser(int user_idx) {
+    public totalInfoDTO getInfo(int user_idx) {
         User user = userRepository.findById(user_idx).orElse(null);
         GithubUser gitUser = githubUserRepository.findById(user_idx).orElse(null);
 
@@ -40,6 +41,7 @@ public class CardService {
                 .avatarUrl(gitUser.getAvatarUrl())
                 .build();
 
+        System.out.println(totalInfo);
         return totalInfo;
     }
 
