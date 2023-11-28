@@ -1,4 +1,4 @@
-package gitME.user;
+package gitME.user.service;
 
 import gitME.auth.dto.SignUpDataDTO;
 import gitME.entity.CodeStack;
@@ -32,7 +32,6 @@ public class DataJpaService {
             user.setName(signUpDataDTO.getName());
             user.setBirthDate(signUpDataDTO.getBirthDate());
             user.setEmail(signUpDataDTO.getEmail());
-            user.setPhone(signUpDataDTO.getPhone());
             user.setPhone(signUpDataDTO.getPhone());
             userRepository.save(user);
 

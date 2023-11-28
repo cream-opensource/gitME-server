@@ -1,4 +1,4 @@
-package gitME.user;
+package gitME.user.service;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
