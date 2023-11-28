@@ -3,6 +3,8 @@ package gitME.user.dto;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Map;
+
 @Builder
 @Data
 public class totalInfoDTO {
@@ -20,5 +22,8 @@ public class totalInfoDTO {
     public int totalStars;
     public int totalCommits;
     public String avatarUrl;
+
+    // codeStack
+    private Map<String, Integer> languages;
 
 }

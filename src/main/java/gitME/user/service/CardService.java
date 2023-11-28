@@ -27,6 +27,12 @@ public class CardService {
         User user = userRepository.findById(user_idx).orElse(null);
         GithubUser gitUser = githubUserRepository.findById(user_idx).orElse(null);
 
+        List<CodeStack> codeStacks = codeStackRepository.findByUserIdx(user_idx);
+        Map<String, Integer> codeStackMap = new HashMap<>();
+        for (CodeStack codeStack : codeStacks) {
+            codeStackMap.put(codeStack.getLanguage(), codeStack.getCodeCount());
+        }
+
         totalInfoDTO totalInfo = totalInfoDTO.builder()
                 .kakaoId(user.getKakaoId())
                 .name(user.getName())
@@ -39,19 +45,9 @@ public class CardService {
                 .totalStars(gitUser.getTotalStars())
                 .totalCommits(gitUser.getTotalCommits())
                 .avatarUrl(gitUser.getAvatarUrl())
+                .languages(codeStackMap)  // Set languages field
                 .build();
 
-        System.out.println(totalInfo);
         return totalInfo;
     }
-
-
-    public void lang(int user_idx) {
-        List<CodeStack> codeStacks = codeStackRepository.findByUserIdx(user_idx);
-            Map<String, Integer> codeStackMap = new HashMap<>();
-            for (CodeStack codeStack : codeStacks) {
-                codeStackMap.put(codeStack.getLanguage(),
-                        codeStack.getCodeCount());
-            }
-        }
 }

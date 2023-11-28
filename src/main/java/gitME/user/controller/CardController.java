@@ -14,9 +14,7 @@ public class CardController {
     private final CardService cardService;
 
     @GetMapping("/cardInfo/{idx}")
-    public void getCardInfo(@PathVariable("idx") int idx) {
-        System.out.println("hihi");
-        cardService.getInfo(idx);
-        System.out.println("bye");
+    public totalInfoDTO getCardInfo(@PathVariable("idx") int idx) {
+        return cardService.getInfo(idx);
     }
 }
