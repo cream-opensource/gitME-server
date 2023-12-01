@@ -3,10 +3,12 @@ package gitME.user.service;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import gitME.common.util.RestUtil;
+import gitME.entity.CodeStack;
 import gitME.entity.GithubUser;
 import gitME.entity.dto.GitHubDataDTO;
 import gitME.entity.vo.GitHubRepositoryResponseVO;
 import gitME.entity.vo.GitHubUserResponseVO;
+import gitME.repository.CodeStackRepository;
 import gitME.repository.GithubUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +32,7 @@ import java.util.Map;
 public class GitHubDataService {
 
     private final GithubUserRepository githubUserRepository;
+    private final CodeStackRepository codeStackRepository;
 
     private static final Gson gson = new Gson();
 
@@ -46,8 +49,6 @@ public class GitHubDataService {
 
             // GitHub 데이터 조회
             GitHubDataDTO gitHubDataDTO = getData(accessToken);
-
-            //
 
             // 현재 날짜 및 시간 가져오기 (예: "yyyy-MM-dd HH:mm:ss")
             Date now = new Date();
@@ -66,6 +67,16 @@ public class GitHubDataService {
             githubUser.setTotalCommits(gitHubDataDTO.getTotalCommits());
             githubUser.setRefreshDate(dateString);
             githubUserRepository.save(githubUser);
+
+            // GitHub 저장소 사용 언어 정보 갱신
+            Map<String, Integer> languages = gitHubDataDTO.getLanguages();
+            for (Map.Entry<String, Integer> entry : languages.entrySet()) {
+                CodeStack codeStack = new CodeStack();
+                codeStack.setUserIdx(userIdx);
+                codeStack.setLanguage(entry.getKey());
+                codeStack.setCodeCount(entry.getValue());
+                codeStackRepository.save(codeStack);
+            }
 
         } catch (Exception e) {
             log.error("", e);
