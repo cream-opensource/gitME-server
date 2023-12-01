@@ -4,7 +4,7 @@ import gitME.auth.dto.SignUpDataDTO;
 import gitME.entity.CodeStack;
 import gitME.entity.GithubUser;
 import gitME.entity.User;
-import gitME.entity.vo.GitHubData;
+import gitME.entity.dto.GitHubDataDTO;
 import gitME.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import java.util.Map;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class DataJpaService {
+public class CardDataService {
     private final UserRepository userRepository;
     private final GithubUserRepository githubUserRepository;
     private final RepositoryRepository repositoryRepository;
@@ -24,7 +24,7 @@ public class DataJpaService {
     private final ExternalLinkRepository externalLinkRepository;
 
     @Transactional
-    public void saveData(SignUpDataDTO signUpDataDTO, GitHubData gitHubData) {
+    public void saveData(SignUpDataDTO signUpDataDTO, GitHubDataDTO gitHubDataDTO) {
         try {
             // User 엔티티 생성 및 저장
             User user = new User();
@@ -39,17 +39,17 @@ public class DataJpaService {
             GithubUser githubUser = new GithubUser();
             githubUser.setUserIdx(user.getIdx());
             githubUser.setAccessToken(signUpDataDTO.getGitAccessToken());
-            githubUser.setNickname(gitHubData.getNickname());
-            githubUser.setAvatarUrl(gitHubData.getAvatarUrl());
-            githubUser.setFollowers(gitHubData.getFollowers());
-            githubUser.setFollowing(gitHubData.getFollowing());
-            githubUser.setTotalStars(gitHubData.getTotalStars());
-            githubUser.setTotalCommits(gitHubData.getTotalCommits());
+            githubUser.setNickname(gitHubDataDTO.getNickname());
+            githubUser.setAvatarUrl(gitHubDataDTO.getAvatarUrl());
+            githubUser.setFollowers(gitHubDataDTO.getFollowers());
+            githubUser.setFollowing(gitHubDataDTO.getFollowing());
+            githubUser.setTotalStars(gitHubDataDTO.getTotalStars());
+            githubUser.setTotalCommits(gitHubDataDTO.getTotalCommits());
             githubUserRepository.save(githubUser);
 
             // CodeStack 엔티티 생성 및 저장
 //        @SuppressWarnings("unchecked")
-            Map<String, Integer> languages = gitHubData.getLanguages();
+            Map<String, Integer> languages = gitHubDataDTO.getLanguages();
             for (Map.Entry<String, Integer> entry : languages.entrySet()) {
                 CodeStack codeStack = new CodeStack();
                 codeStack.setUserIdx(user.getIdx());
@@ -57,6 +57,8 @@ public class DataJpaService {
                 codeStack.setCodeCount(entry.getValue());
                 codeStackRepository.save(codeStack);
             }
+
+
 
             // ... 레포, 외부 링크 또는 다른 엔티티 처리 ...
 

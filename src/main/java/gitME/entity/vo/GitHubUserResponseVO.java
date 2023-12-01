@@ -13,7 +13,7 @@ import java.util.Date;
  * Desc: GitHub 사용자 기본 정보 응답 VO
  */
 @Getter @Setter
-public class GitHubUserResponse {
+public class GitHubUserResponseVO {
 
     private String login;          // 사용자 로그인 ID
     @SerializedName("avatar_url")

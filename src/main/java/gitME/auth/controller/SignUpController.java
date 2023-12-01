@@ -3,7 +3,6 @@ package gitME.auth.controller;
 import gitME.auth.service.SignUpService;
 import gitME.auth.dto.SignUpDataDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,8 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class SignUpController {
 
-    @Autowired
-    private SignUpService signUpService;
+    private final SignUpService signUpService;
 
     @PostMapping("/signUp")
     public ResponseEntity<String> submitSignUpData(@RequestBody SignUpDataDTO signUpDataDTO) {
