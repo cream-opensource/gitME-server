@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -29,22 +31,28 @@ public class UserDataService {
     @Transactional
     public void updateUserData(UserDataDTO userDataDTO) {
         try {
+
+            Date now = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dateString = dateFormat.format(now);
+
             User user = new User();
-            user.setIdx(userDataDTO.getIdx());
+            user.setIdx(userDataDTO.getUserIdx());
             user.setKakaoId(userDataDTO.getKakaoId());
             user.setName(userDataDTO.getName());
             user.setBirthDate(userDataDTO.getBirthDate());
             user.setEmail(userDataDTO.getEmail());
             user.setPhone(userDataDTO.getPhone());
+            user.setUpdateDate(dateString);
             userRepository.save(user);
 
-            externalLinkRepository.deleteAllByUserIdx(userDataDTO.getIdx());
+            externalLinkRepository.deleteAllByUserIdx(userDataDTO.getUserIdx());
 
             Map<String, String> externalLinks = userDataDTO.getExternalLink();
             for (Map.Entry<String, String> entry : externalLinks.entrySet()) {
 
                 ExternalLink externalLink = new ExternalLink();
-                externalLink.setUserIdx(userDataDTO.getIdx());
+                externalLink.setUserIdx(userDataDTO.getUserIdx());
                 externalLink.setUrl(entry.getValue());
                 externalLink.setDescription(entry.getKey());
                 externalLinkRepository.save(externalLink);

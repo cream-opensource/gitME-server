@@ -16,7 +16,7 @@ import java.util.Map;
 @Data
 public class UserDataDTO {
 
-    private int idx;
+    private int userIdx;
     private String kakaoId;
     private String name;
     private String birthDate;
