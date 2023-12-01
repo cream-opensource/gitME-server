@@ -2,8 +2,8 @@ package gitME.auth.service;
 
 import gitME.auth.dto.SignUpDataDTO;
 import gitME.entity.dto.GitHubDataDTO;
-import gitME.user.DataJpaService;
-import gitME.user.GitHubDataService;
+import gitME.user.service.CardDataService;
+import gitME.user.service.GitHubDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class SignUpService {
 
     private final GitHubDataService gitHubDataService;
-    private final DataJpaService dataJpaService;
+    private final CardDataService cardDataService;
 
     public void createUser(SignUpDataDTO signUpDataDTO) throws Exception {
         try {
@@ -23,7 +23,7 @@ public class SignUpService {
             System.out.println("gitAllInfo = " + gitAllInfoDTO);
 
             //받아온 데이터를 jpa를 사용해서 저장한다.
-            dataJpaService.saveData(signUpDataDTO, gitAllInfoDTO);
+            cardDataService.saveData(signUpDataDTO, gitAllInfoDTO);
 
         } catch (Exception e) {
             log.error("createUser: error", e);

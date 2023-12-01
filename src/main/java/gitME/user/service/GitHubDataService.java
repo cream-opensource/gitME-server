@@ -3,14 +3,19 @@ package gitME.user.service;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import gitME.common.util.RestUtil;
+import gitME.entity.GithubUser;
 import gitME.entity.dto.GitHubDataDTO;
 import gitME.entity.vo.GitHubRepositoryResponseVO;
 import gitME.entity.vo.GitHubUserResponseVO;
+import gitME.repository.GithubUserRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kohsuke.github.*;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,10 +25,56 @@ import java.util.Map;
  * Desc: GitHub 데이터 조회 서비스 클래스
  */
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class GitHubDataService {
 
+    private final GithubUserRepository githubUserRepository;
+
     private static final Gson gson = new Gson();
+
+    /**
+     * GitHub 데이터 조회
+     * @param userIdx 사용자 식별자
+     */
+
+    public void updateData(int userIdx) throws Exception {
+        try {
+
+            // 사용자 정보 조회 (GitHub 접근 토큰 획득)
+            String accessToken = githubUserRepository.findByUserIdx(userIdx).getAccessToken();
+
+            // GitHub 데이터 조회
+            GitHubDataDTO gitHubDataDTO = getData(accessToken);
+
+            //
+
+            // 현재 날짜 및 시간 가져오기 (예: "yyyy-MM-dd HH:mm:ss")
+            Date now = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dateString = dateFormat.format(now);
+
+            // GitHub 데이터 갱신
+            GithubUser githubUser = new GithubUser();
+            githubUser.setUserIdx(userIdx);
+            githubUser.setAccessToken(accessToken);
+            githubUser.setNickname(gitHubDataDTO.getNickname());
+            githubUser.setAvatarUrl(gitHubDataDTO.getAvatarUrl());
+            githubUser.setFollowers(gitHubDataDTO.getFollowers());
+            githubUser.setFollowing(gitHubDataDTO.getFollowing());
+            githubUser.setTotalStars(gitHubDataDTO.getTotalStars());
+            githubUser.setTotalCommits(gitHubDataDTO.getTotalCommits());
+            githubUser.setRefreshDate(dateString);
+            githubUserRepository.save(githubUser);
+
+        } catch (Exception e) {
+            log.error("", e);
+            throw e;
+
+        }
+
+    }
+
 
     /**
      * GitHub 데이터 조회

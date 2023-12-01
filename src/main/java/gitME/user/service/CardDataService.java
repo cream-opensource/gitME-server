@@ -16,7 +16,7 @@ import java.util.Map;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class DataJpaService {
+public class CardDataService {
     private final UserRepository userRepository;
     private final GithubUserRepository githubUserRepository;
     private final RepositoryRepository repositoryRepository;
@@ -57,6 +57,8 @@ public class DataJpaService {
                 codeStack.setCodeCount(entry.getValue());
                 codeStackRepository.save(codeStack);
             }
+
+
 
             // ... 레포, 외부 링크 또는 다른 엔티티 처리 ...
 
