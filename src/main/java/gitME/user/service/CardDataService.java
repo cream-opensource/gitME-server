@@ -2,6 +2,7 @@ package gitME.user.service;
 
 import gitME.auth.dto.SignUpDataDTO;
 import gitME.entity.CodeStack;
+import gitME.entity.ExternalLink;
 import gitME.entity.GithubUser;
 import gitME.entity.User;
 import gitME.entity.dto.GitHubDataDTO;
@@ -19,7 +20,6 @@ import java.util.Map;
 public class CardDataService {
     private final UserRepository userRepository;
     private final GithubUserRepository githubUserRepository;
-    private final RepositoryRepository repositoryRepository;
     private final CodeStackRepository codeStackRepository;
     private final ExternalLinkRepository externalLinkRepository;
 
@@ -48,7 +48,6 @@ public class CardDataService {
             githubUserRepository.save(githubUser);
 
             // CodeStack 엔티티 생성 및 저장
-//        @SuppressWarnings("unchecked")
             Map<String, Integer> languages = gitHubDataDTO.getLanguages();
             for (Map.Entry<String, Integer> entry : languages.entrySet()) {
                 CodeStack codeStack = new CodeStack();
@@ -56,6 +55,17 @@ public class CardDataService {
                 codeStack.setLanguage(entry.getKey());
                 codeStack.setCodeCount(entry.getValue());
                 codeStackRepository.save(codeStack);
+            }
+
+            Map<String, String> externalLinks = signUpDataDTO.getExternalLink();
+            for (Map.Entry<String, String> entry : externalLinks.entrySet()) {
+
+                ExternalLink externalLink = new ExternalLink();
+                externalLink.setUserIdx(user.getIdx());
+                externalLink.setUrl(entry.getValue());
+                externalLink.setDescription(entry.getKey());
+                externalLinkRepository.save(externalLink);
+
             }
 
 

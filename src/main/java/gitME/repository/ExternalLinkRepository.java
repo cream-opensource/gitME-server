@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ExternalLinkRepository extends JpaRepository<ExternalLink, Integer> {
     List<ExternalLink> findByUserIdx(int userIdx);
+
+    void deleteAllByUserIdx(int userIdx);
 }
