@@ -2,19 +2,23 @@ package gitME.auth.service;
 
 import gitME.auth.dto.SignUpDataDTO;
 import gitME.entity.dto.GitHubDataDTO;
+import gitME.repository.UserRepository;
 import gitME.user.service.CardDataService;
 import gitME.user.service.GitHubDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class SignUpService {
+public class SignService {
 
     private final GitHubDataService gitHubDataService;
     private final CardDataService cardDataService;
+    private final UserRepository userRepository;
 
     public void createUser(SignUpDataDTO signUpDataDTO) throws Exception {
         try {
@@ -30,5 +34,11 @@ public class SignUpService {
             throw e;
 
         }
+    }
+
+    public int getUserIdxByKakaoId(String kakaoId) {
+        return userRepository.findByKakaoId(kakaoId)
+                .orElseThrow(() -> new NoSuchElementException("No user found with kakaoId: " + kakaoId))
+                .getIdx();
     }
 }
