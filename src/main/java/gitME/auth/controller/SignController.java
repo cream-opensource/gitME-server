@@ -2,6 +2,7 @@ package gitME.auth.controller;
 
 import gitME.auth.service.SignService;
 import gitME.auth.dto.SignUpDataDTO;
+import gitME.user.service.GitHubDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,10 @@ import java.util.NoSuchElementException;
 public class SignController {
 
     private final SignService signService;
+    private final GitHubDataService gitHubDataService;
 
     @GetMapping("/sign/{kakaoId}")
-    public ResponseEntity<?> checkSign(@PathVariable("kakaoId") String kakaoId){
+    public ResponseEntity<?> checkSign(@PathVariable("kakaoId") String kakaoId) {
         try {
             int userIdx = signService.getUserIdxByKakaoId(kakaoId);
             Map<String, Integer> userMap = new HashMap<>();
@@ -33,6 +35,18 @@ public class SignController {
         }
     }
 
+    @GetMapping("/github/language/{accessToken}")
+    public ResponseEntity<?> getGithubAggregateLanguages(@PathVariable("accessToken") String accessToken) {
+        try {
+            Map<String, Integer> aggregatedLanguages = gitHubDataService.getAggregatedLanguages(accessToken);
+            return ResponseEntity.status(HttpStatus.OK).body(aggregatedLanguages);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error during GithubAggregateLanguages get");
+
+        }
+
+    }
+
     @PostMapping("/signUp")
     public ResponseEntity<String> submitSignUpData(@RequestBody SignUpDataDTO signUpDataDTO) {
         try {
@@ -42,4 +56,6 @@ public class SignController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error during userSignUpData post");
         }
     }
+
+
 }

@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import java.util.Map;
 
 //@Builder
-@NoArgsConstructor // 기본 생성자를 생성
+@NoArgsConstructor
 @Data
 public class SignUpDataDTO {
 
@@ -17,4 +17,5 @@ public class SignUpDataDTO {
     private String birthDate;
     private String gitAccessToken;
     private Map<String, String> externalLink;
+    private Map<String, String> language;
 }

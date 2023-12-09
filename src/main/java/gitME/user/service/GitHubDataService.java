@@ -102,9 +102,10 @@ public class GitHubDataService {
 
             // GitHub 사용자 총 커밋 수 조회
             int totalCommits = getCommitCount(accessToken, gitHubUserResponseVO);
+//            int totalCommits = 1000;
 
             // GitHub 저장소 사용 언어 정보 모음 조회
-            Map<String, Integer> aggregateLanguages = getAggregateLanguages(accessToken);
+            Map<String, Integer> aggregateLanguages = getAggregatedLanguages(accessToken);
 
             return GitHubDataDTO.builder()
                     .nickname(gitHubUserResponseVO.getLogin())
@@ -191,7 +192,7 @@ public class GitHubDataService {
      * @param accessToken GitHub 접근 토큰
      * @return GitHub 저장소 사용 언어 정보 모음
      */
-    public Map<String, Integer> getAggregateLanguages(String accessToken) {
+    public Map<String, Integer> getAggregatedLanguages(String accessToken) {
         try {
             List<GitHubRepositoryResponseVO> repositoryList = getRepositoryList(accessToken);
 
