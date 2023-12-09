@@ -17,5 +17,6 @@ public class SignUpDataDTO {
     private String birthDate;
     private String gitAccessToken;
     private Map<String, String> externalLink;
-    private Map<String, String> language;
+    private Map<String, String> skill;
+    private String skillProficiency;
 }

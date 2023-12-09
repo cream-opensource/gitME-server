@@ -1,10 +1,7 @@
 package gitME.user.service;
 
 import gitME.auth.dto.SignUpDataDTO;
-import gitME.entity.CodeStack;
-import gitME.entity.ExternalLink;
-import gitME.entity.GithubUser;
-import gitME.entity.User;
+import gitME.entity.*;
 import gitME.entity.dto.GitHubDataDTO;
 import gitME.repository.*;
 import jakarta.transaction.Transactional;
@@ -22,6 +19,7 @@ public class CardDataService {
     private final GithubUserRepository githubUserRepository;
     private final CodeStackRepository codeStackRepository;
     private final ExternalLinkRepository externalLinkRepository;
+    private final SkillRepository skillRepository;
 
     @Transactional
     public void saveData(SignUpDataDTO signUpDataDTO, GitHubDataDTO gitHubDataDTO) {
@@ -68,6 +66,18 @@ public class CardDataService {
 
             }
 
+            Map<String, String> skillMap = signUpDataDTO.getSkill();
+            if (!skillMap.isEmpty()) {
+                String language = skillMap.keySet().stream().findFirst().get();
+                String detail = skillMap.values().stream().findFirst().get();
+
+                Skill skill = new Skill();
+                skill.setUserIdx(user.getIdx());
+                skill.setLanguage(language);
+                skill.setDetail(detail);
+                skill.setProficiency(signUpDataDTO.getSkillProficiency());
+                skillRepository.save(skill);
+            }
 
 
             // ... 레포, 외부 링크 또는 다른 엔티티 처리 ...
