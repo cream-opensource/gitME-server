@@ -15,6 +15,7 @@ public class SignUpDataDTO {
     private String phone;
     private String email;
     private String birthDate;
+    private String introduction;
     private String gitAccessToken;
     private Map<String, String> externalLink;
     private Map<String, String> skill;

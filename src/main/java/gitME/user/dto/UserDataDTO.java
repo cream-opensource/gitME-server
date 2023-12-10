@@ -22,6 +22,7 @@ public class UserDataDTO {
     private String birthDate;
     private String email;
     private String phone;
+    private String introduction;
     private Map<String, String> externalLink;
     private Map<String, String> skill;
     private String skillProficiency;

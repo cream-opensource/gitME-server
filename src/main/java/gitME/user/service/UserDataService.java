@@ -46,6 +46,7 @@ public class UserDataService {
             user.setBirthDate(userDataDTO.getBirthDate());
             user.setEmail(userDataDTO.getEmail());
             user.setPhone(userDataDTO.getPhone());
+            user.setIntroduction(userDataDTO.getIntroduction());
             user.setUpdateDate(dateString);
             userRepository.save(user);
 

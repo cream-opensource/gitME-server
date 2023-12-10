@@ -31,6 +31,7 @@ public class CardDataService {
             user.setBirthDate(signUpDataDTO.getBirthDate());
             user.setEmail(signUpDataDTO.getEmail());
             user.setPhone(signUpDataDTO.getPhone());
+            user.setIntroduction(signUpDataDTO.getIntroduction());
             userRepository.save(user);
 
             // GitHubUser 엔티티 생성 및 저장
