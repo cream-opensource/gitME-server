@@ -23,12 +23,19 @@ public class CardService {
     private final CodeStackRepository codeStackRepository;
     private final CardVisibilityConfigRepository cardVisibilityConfigRepository;
     private final ExternalLinkRepository externalLinkRepository;
+    private final SkillRepository skillRepository;
 
     @Transactional
     public TotalInfoDTO getInfo(int userIdx) {
         User user = userRepository.findById(userIdx).orElse(null);
+
         GithubUser gitUser = githubUserRepository.findById(userIdx).orElse(null);
 
+        Skill skill = skillRepository.findByUserIdx(userIdx);
+        Map<String, String> skillMap = new HashMap<>();
+        if (skill != null) {
+            skillMap.put(skill.getLanguage(), skill.getDetail());
+        }
         List<CodeStack> codeStacks = codeStackRepository.findByUserIdx(userIdx);
         Map<String, Integer> codeStackMap = new HashMap<>();
         for (CodeStack codeStack : codeStacks) {
@@ -38,8 +45,9 @@ public class CardService {
         List<ExternalLink> externalLinks = externalLinkRepository.findByUserIdx(userIdx);
         Map<String, String> externalLinkMap = new HashMap<>();
         for (ExternalLink externalLink : externalLinks) {
-            externalLinkMap.put(externalLink.getUrl(), externalLink.getDescription());
+            externalLinkMap.put(externalLink.getDescription(), externalLink.getUrl());
         }
+
 
         TotalInfoDTO totalInfo = TotalInfoDTO.builder()
                 .userIdx(user.getIdx())
@@ -48,6 +56,9 @@ public class CardService {
                 .birthDate(user.getBirthDate())
                 .email(user.getEmail())
                 .phone(user.getPhone())
+                .introduction(user.getIntroduction())
+                .skill(skillMap)
+                .skillProficiency(skill.getProficiency())
                 .externalLink(externalLinkMap)
                 .nickname(gitUser.getNickname())
                 .followers(gitUser.getFollowers())
@@ -62,7 +73,7 @@ public class CardService {
     }
 
     @Transactional
-    public void saveCardVisibilityConfig(CardVisibilityConfigDTO cardVisibilityConfigDto) throws Exception {
+    public void saveCardVisibilityConfig(CardVisibilityConfigDTO cardVisibilityConfigDto) {
         try {
             CardVisibilityConfig cardVisibilityConfig = new CardVisibilityConfig();
             cardVisibilityConfig.setUserIdx(cardVisibilityConfigDto.getUserIdx());

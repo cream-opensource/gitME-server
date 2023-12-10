@@ -8,4 +8,6 @@ public interface SkillRepository extends JpaRepository<Skill, SkillId> {
 
     void deleteAllByUserIdx(int userIdx);
 
+    Skill findByUserIdx(int userIdx);
+
 }

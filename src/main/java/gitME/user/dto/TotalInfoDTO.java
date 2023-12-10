@@ -1,10 +1,8 @@
 package gitME.user.dto;
 
-import gitME.entity.ExternalLink;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
 import java.util.Map;
 
 @Builder
@@ -17,6 +15,10 @@ public class TotalInfoDTO {
     private String birthDate;
     private String email;
     private String phone;
+    private String introduction;
+
+    private Map<String, String> skill;
+    private String skillProficiency;
     private Map<String, String> externalLink;
 
     // githubInfo
