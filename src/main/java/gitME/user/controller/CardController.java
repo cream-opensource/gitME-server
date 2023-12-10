@@ -1,7 +1,5 @@
 package gitME.user.controller;
 
-import gitME.entity.User;
-import gitME.entity.dto.GitHubDataDTO;
 import gitME.repository.GithubUserRepository;
 import gitME.user.dto.CardVisibilityConfigDTO;
 import gitME.user.dto.TotalInfoDTO;
@@ -24,7 +22,6 @@ public class CardController {
 
     private final CardService cardService;
     private final GitHubDataService gitHubDataService;
-    private final GithubUserRepository githubUserRepository;
     private final UserDataService userDataService;
 
     @GetMapping("/cardInfo/{userIdx}")
@@ -38,7 +35,7 @@ public class CardController {
     }
 
     @PostMapping("/cardVisibility")
-    public ResponseEntity<String> submitCardVisibilityConfig(@RequestBody CardVisibilityConfigDTO cardVisibilityConfigDTO) throws Exception {
+    public ResponseEntity<String> submitCardVisibilityConfig(@RequestBody CardVisibilityConfigDTO cardVisibilityConfigDTO) {
         try {
             cardService.saveCardVisibilityConfig(cardVisibilityConfigDTO);
             return ResponseEntity.status(HttpStatus.OK).body("cardVisibilityConfig post successfully");
@@ -50,8 +47,6 @@ public class CardController {
     @PutMapping("/githubData")
     public ResponseEntity<String> updateGithubData(@RequestBody Map<String, Integer> userIdxMap) {
         try {
-//            List<ExternalLink> externalLinks = externalLinkRepository.findByUserIdx(userIdx);
-//            User user = userRepository.findByIdx(Idx);
             gitHubDataService.updateData(userIdxMap.get("userIdx"));
 
             return ResponseEntity.status(HttpStatus.OK).body("GithubData put successfully");

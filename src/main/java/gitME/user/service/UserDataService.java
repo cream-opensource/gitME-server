@@ -1,8 +1,10 @@
 package gitME.user.service;
 
 import gitME.entity.ExternalLink;
+import gitME.entity.Skill;
 import gitME.entity.User;
 import gitME.repository.ExternalLinkRepository;
+import gitME.repository.SkillRepository;
 import gitME.repository.UserRepository;
 import gitME.user.dto.UserDataDTO;
 import jakarta.transaction.Transactional;
@@ -27,6 +29,7 @@ public class UserDataService {
 
     private final UserRepository userRepository;
     private final ExternalLinkRepository externalLinkRepository;
+    private final SkillRepository skillRepository;
 
     @Transactional
     public void updateUserData(UserDataDTO userDataDTO) {
@@ -56,8 +59,25 @@ public class UserDataService {
                 externalLink.setUrl(entry.getValue());
                 externalLink.setDescription(entry.getKey());
                 externalLinkRepository.save(externalLink);
-
             }
+
+            skillRepository.deleteAllByUserIdx(userDataDTO.getUserIdx());
+
+            Map<String, String> skillMap = userDataDTO.getSkill();
+            if (!skillMap.isEmpty()) {
+                String language = skillMap.keySet().stream().findFirst().get();
+                String detail = skillMap.values().stream().findFirst().get();
+
+                Skill skill = new Skill();
+                skill.setUserIdx(user.getIdx());
+                skill.setLanguage(language);
+                skill.setDetail(detail);
+                skill.setProficiency(userDataDTO.getSkillProficiency());
+                skillRepository.save(skill);
+            }
+
+
+
         } catch (Exception e) {
             log.error("", e);
             throw e;
