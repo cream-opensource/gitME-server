@@ -2,6 +2,7 @@ package gitME.user.service;
 
 import gitME.entity.*;
 import gitME.repository.*;
+import gitME.user.dto.CardDTO;
 import gitME.user.dto.CardVisibilityConfigDTO;
 import gitME.user.dto.TotalInfoDTO;
 import jakarta.transaction.Transactional;
@@ -24,6 +25,7 @@ public class CardService {
     private final CardVisibilityConfigRepository cardVisibilityConfigRepository;
     private final ExternalLinkRepository externalLinkRepository;
     private final SkillRepository skillRepository;
+    private final CardRepository cardRepository;
 
     @Transactional
     public TotalInfoDTO getInfo(int userIdx) {
@@ -95,5 +97,19 @@ public class CardService {
             throw e;
 
         }
+    }
+
+    public void createCard(CardDTO cardDTO) {
+        Card card = new Card();
+        card.setUserIdx(cardDTO.getUserIdx());
+        card.setTemplateIdx(cardDTO.getTemplateIdx());
+        card.setColor(cardDTO.getColor());
+        card.setSequence(cardDTO.getSequence());
+        cardRepository.save(card);
+    }
+
+    public List<Card> getCard(int userIdx){
+
+        return cardRepository.findAllByUserIdx(userIdx);
     }
 }

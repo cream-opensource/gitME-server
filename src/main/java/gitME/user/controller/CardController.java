@@ -1,6 +1,7 @@
 package gitME.user.controller;
 
-import gitME.repository.GithubUserRepository;
+import gitME.entity.Card;
+import gitME.user.dto.CardDTO;
 import gitME.user.dto.CardVisibilityConfigDTO;
 import gitME.user.dto.TotalInfoDTO;
 import gitME.user.dto.UserDataDTO;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -30,7 +32,7 @@ public class CardController {
             TotalInfoDTO totalInfoDTO = cardService.getInfo(userIdx);
             return ResponseEntity.status(HttpStatus.OK).body(totalInfoDTO);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error retrieving card information");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error during card information get");
         }
     }
 
@@ -38,7 +40,7 @@ public class CardController {
     public ResponseEntity<String> submitCardVisibilityConfig(@RequestBody CardVisibilityConfigDTO cardVisibilityConfigDTO) {
         try {
             cardService.saveCardVisibilityConfig(cardVisibilityConfigDTO);
-            return ResponseEntity.status(HttpStatus.OK).body("cardVisibilityConfig post successfully");
+            return ResponseEntity.status(HttpStatus.CREATED).body("cardVisibilityConfig post successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error during cardVisibilityConfigData post");
         }
@@ -58,12 +60,32 @@ public class CardController {
     }
 
     @PutMapping("/userData")
-     public ResponseEntity<String> updateUserData(@RequestBody UserDataDTO userDataDTO) {
+    public ResponseEntity<String> updateUserData(@RequestBody UserDataDTO userDataDTO) {
         try {
             userDataService.updateUserData(userDataDTO);
             return ResponseEntity.status(HttpStatus.OK).body("updateUserData put successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error during updateUserData put");
+        }
+    }
+
+    @PostMapping("/card")
+    public ResponseEntity<String> submitCard(@RequestBody CardDTO cardDTO) {
+        try {
+            cardService.createCard(cardDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Card post successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error during Card post");
+        }
+    }
+
+    @GetMapping("/card/{userIdx}")
+    public ResponseEntity<?> getCard(@PathVariable("userIdx") int userIdx) {
+        try {
+            List<Card> cards = cardService.getCard(userIdx);
+            return ResponseEntity.status(HttpStatus.CREATED).body(cards);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error during Card get");
         }
     }
 }
